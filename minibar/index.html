@@ -190,6 +190,13 @@
         color: var(--neon-cyan);
         text-shadow: 0 0 10px var(--neon-cyan);
       }
+      .nav-links a.nav-eventflow {
+        color: #ff6b35;
+      }
+      .nav-links a.nav-eventflow:hover {
+        color: #ff6b35;
+        text-shadow: 0 0 10px #ff6b35;
+      }
       .mobile-menu-btn {
         display: none;
         background: none;
@@ -481,15 +488,22 @@
     <div class="page-content">
       <nav class="navbar" id="navbar">
         <div class="container nav-content">
-          <a href="#" class="logo"
-            ><i class="fas fa-wine-bottle"></i
-            ><span>Minibar<strong>Takip</strong></span></a
+          <a
+            href="../index.html"
+            class="logo"
+            title="Optimist Bilişim Ana Sayfa"
           >
+            <i class="fas fa-rocket"></i>
+            <span>Optimist<strong>Bilişim</strong></span>
+          </a>
           <div class="nav-links" id="navLinks">
+            <a href="../index.html"><i class="fas fa-home"></i> Ana Sayfa</a>
             <a href="#features">Özellikler</a>
             <a href="#ai-ml">Yapay Zeka</a>
             <a href="#panels">Paneller</a>
-            <a href="#benefits">Avantajlar</a>
+            <a href="../eventflow/index.html" class="nav-eventflow"
+              ><i class="fas fa-calendar-check"></i> EventFlow</a
+            >
           </div>
           <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
             <i class="fas fa-bars"></i>
@@ -502,10 +516,13 @@
           <button class="mobile-menu-close" onclick="toggleMobileMenu()">
             <i class="fas fa-times"></i>
           </button>
+          <a href="../index.html" onclick="toggleMobileMenu()">Ana Sayfa</a>
           <a href="#features" onclick="toggleMobileMenu()">Özellikler</a>
           <a href="#ai-ml" onclick="toggleMobileMenu()">Yapay Zeka</a>
           <a href="#panels" onclick="toggleMobileMenu()">Paneller</a>
-          <a href="#benefits" onclick="toggleMobileMenu()">Avantajlar</a>
+          <a href="../eventflow/index.html" onclick="toggleMobileMenu()"
+            >EventFlow PRO</a
+          >
         </div>
       </div>
 

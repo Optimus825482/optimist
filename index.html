@@ -88,9 +88,105 @@
         padding: 0 24px;
       }
 
+      /* Navbar */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 16px 0;
+        transition: all 0.3s ease;
+      }
+      .navbar.scrolled {
+        background: rgba(10, 10, 15, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+        border-bottom: 1px solid rgba(168, 85, 247, 0.1);
+        padding: 12px 0;
+      }
+      .nav-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #e0e0e0;
+      }
+      .nav-logo i {
+        font-size: 1.5rem;
+        background: linear-gradient(
+          135deg,
+          var(--neon-cyan) 0%,
+          var(--neon-purple) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .nav-logo span {
+        background: linear-gradient(
+          135deg,
+          var(--neon-cyan) 0%,
+          var(--neon-purple) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+        font-size: 0.9rem;
+        padding: 8px 16px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .nav-links a:hover {
+        color: var(--white);
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .nav-links a.active {
+        color: var(--neon-purple);
+        background: rgba(168, 85, 247, 0.1);
+      }
+      .nav-links a.minibar:hover,
+      .nav-links a.minibar.active {
+        color: var(--neon-cyan);
+        background: rgba(0, 245, 255, 0.1);
+      }
+      .nav-links a.eventflow:hover,
+      .nav-links a.eventflow.active {
+        color: var(--neon-orange);
+        background: rgba(255, 107, 53, 0.1);
+      }
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--neon-purple);
+        cursor: pointer;
+      }
+
       /* Header */
       .header {
-        padding: 30px 0;
+        padding: 100px 0 30px;
         text-align: center;
       }
       .logo {
@@ -402,12 +498,102 @@
           font-size: 3.5rem;
         }
       }
+
+      /* Mobile Menu */
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(10, 10, 15, 0.98);
+        backdrop-filter: blur(20px);
+        z-index: 2000;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .mobile-menu.active {
+        display: flex;
+        opacity: 1;
+      }
+      .mobile-menu-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        gap: 24px;
+      }
+      .mobile-menu-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        color: var(--neon-purple);
+        cursor: pointer;
+      }
+      .mobile-menu-content a {
+        font-size: 1.5rem;
+        color: #e0e0e0;
+        text-decoration: none;
+        padding: 12px 24px;
+        transition: all 0.3s;
+      }
+      .mobile-menu-content a:hover {
+        color: var(--neon-purple);
+        text-shadow: 0 0 10px var(--neon-purple);
+      }
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+        .mobile-menu-btn {
+          display: block;
+        }
+      }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   </head>
   <body>
     <canvas id="three-canvas"></canvas>
     <div class="scanlines"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+      <div class="container nav-content">
+        <a href="#" class="nav-logo">
+          <i class="fas fa-rocket"></i>
+          <span>Optimist Bilişim</span>
+        </a>
+        <div class="nav-links" id="navLinks">
+          <a href="#" class="active"><i class="fas fa-home"></i> Ana Sayfa</a>
+          <a href="minibar/index.html" class="minibar"
+            ><i class="fas fa-wine-bottle"></i> Minibar</a
+          >
+          <a href="eventflow/index.html" class="eventflow"
+            ><i class="fas fa-calendar-check"></i> EventFlow</a
+          >
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-menu-content">
+        <button class="mobile-menu-close" id="mobileMenuClose">
+          <i class="fas fa-times"></i>
+        </button>
+        <a href="#">Ana Sayfa</a>
+        <a href="minibar/index.html">Minibar Takip</a>
+        <a href="eventflow/index.html">EventFlow PRO</a>
+      </div>
+    </div>
 
     <div class="page-content">
       <header class="header">
@@ -648,6 +834,37 @@
       };
 
       document.addEventListener("DOMContentLoaded", initThreeJS);
+
+      // Navbar scroll effect
+      window.addEventListener("scroll", () => {
+        const navbar = document.getElementById("navbar");
+        if (window.scrollY > 50) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      });
+
+      // Mobile menu
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenuClose = document.getElementById("mobileMenuClose");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener("click", () => {
+          mobileMenu.classList.add("active");
+        });
+      }
+      if (mobileMenuClose) {
+        mobileMenuClose.addEventListener("click", () => {
+          mobileMenu.classList.remove("active");
+        });
+      }
+      mobileMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.remove("active");
+        });
+      });
     </script>
   </body>
 </html>

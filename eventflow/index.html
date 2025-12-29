@@ -185,6 +185,13 @@
         color: var(--neon-orange);
         text-shadow: 0 0 10px var(--neon-orange);
       }
+      .nav-links a.nav-minibar {
+        color: #00f5ff;
+      }
+      .nav-links a.nav-minibar:hover {
+        color: #00f5ff;
+        text-shadow: 0 0 10px #00f5ff;
+      }
       .mobile-menu-btn {
         display: none;
         background: none;
@@ -418,15 +425,16 @@
     <div class="page-content">
       <nav class="navbar" id="navbar">
         <div class="container nav-content">
-          <a href="#" class="logo">
-            <i class="fas fa-calendar-check"></i>
-            <span>Event<strong>Flow</strong> PRO</span>
+          <a href="../index.html" class="logo" title="Optimist Bilişim Ana Sayfa">
+            <i class="fas fa-rocket"></i>
+            <span>Optimist<strong>Bilişim</strong></span>
           </a>
           <div class="nav-links" id="navLinks">
+            <a href="../index.html"><i class="fas fa-home"></i> Ana Sayfa</a>
             <a href="#venue-layout">Alan Tasarımı</a>
             <a href="#features">Özellikler</a>
-            <a href="#realtime">Gerçek Zamanlı</a>
             <a href="#panels">Paneller</a>
+            <a href="../minibar/index.html" class="nav-minibar"><i class="fas fa-wine-bottle"></i> Minibar</a>
           </div>
           <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
             <i class="fas fa-bars"></i>
@@ -439,10 +447,11 @@
           <button class="mobile-menu-close" onclick="toggleMobileMenu()">
             <i class="fas fa-times"></i>
           </button>
+          <a href="../index.html" onclick="toggleMobileMenu()">Ana Sayfa</a>
+          <a href="#venue-layout" onclick="toggleMobileMenu()">Alan Tasarımı</a>
           <a href="#features" onclick="toggleMobileMenu()">Özellikler</a>
-          <a href="#realtime" onclick="toggleMobileMenu()">Gerçek Zamanlı</a>
           <a href="#panels" onclick="toggleMobileMenu()">Paneller</a>
-          <a href="#benefits" onclick="toggleMobileMenu()">Avantajlar</a>
+          <a href="../minibar/index.html" onclick="toggleMobileMenu()">Minibar Takip</a>
         </div>
       </div>
 
