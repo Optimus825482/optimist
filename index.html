@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Optimist Bilişim - Projeler | Erkan Erdem</title>
+    <meta
+      name="description"
+      content="Optimist Bilişim ve Elektronik Sistemleri - Yenilikçi yazılım çözümleri. Erkan Erdem tarafından tasarlandı."
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --neon-cyan: #00f5ff;
+        --neon-orange: #ff6b35;
+        --neon-purple: #a855f7;
+        --dark: #0a0a0f;
+        --dark-light: #1e293b;
+        --white: #ffffff;
+        --radius: 12px;
+        --radius-lg: 20px;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        color: #e0e0e0;
+        line-height: 1.6;
+        overflow-x: hidden;
+        background: #0a0a0f;
+        min-height: 100vh;
+      }
+
+      #three-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .scanlines {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.1),
+          rgba(0, 0, 0, 0.1) 1px,
+          transparent 1px,
+          transparent 2px
+        );
+        opacity: 0.2;
+      }
+
+      .page-content {
+        position: relative;
+        z-index: 10;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* Header */
+      .header {
+        padding: 30px 0;
+        text-align: center;
+      }
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--white);
+        text-decoration: none;
+        margin-bottom: 10px;
+      }
+      .logo i {
+        font-size: 2rem;
+        background: linear-gradient(
+          135deg,
+          var(--neon-cyan) 0%,
+          var(--neon-orange) 50%,
+          var(--neon-purple) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .logo-text {
+        background: linear-gradient(
+          135deg,
+          var(--neon-cyan) 0%,
+          var(--neon-purple) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .header-subtitle {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1rem;
+      }
+
+      /* Hero */
+      .hero {
+        padding: 60px 0 40px;
+        text-align: center;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(168, 85, 247, 0.15);
+        color: var(--neon-purple);
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+        border: 1px solid rgba(168, 85, 247, 0.3);
+      }
+      .hero-title {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 20px;
+        color: var(--white);
+      }
+      .gradient-text {
+        background: linear-gradient(
+          135deg,
+          var(--neon-cyan) 0%,
+          var(--neon-orange) 50%,
+          var(--neon-purple) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .hero-subtitle {
+        font-size: 1.15rem;
+        color: rgba(255, 255, 255, 0.7);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* Projects Grid */
+      .projects-section {
+        padding: 60px 0;
+        flex: 1;
+      }
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      /* Project Card */
+      .project-card {
+        background: rgba(10, 10, 15, 0.7);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.4s ease;
+        backdrop-filter: blur(10px);
+        text-decoration: none;
+        display: block;
+      }
+      .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      }
+      .project-card.minibar:hover {
+        border-color: rgba(0, 245, 255, 0.5);
+        box-shadow: 0 20px 60px rgba(0, 245, 255, 0.2);
+      }
+      .project-card.eventflow:hover {
+        border-color: rgba(249, 115, 22, 0.5);
+        box-shadow: 0 20px 60px rgba(249, 115, 22, 0.2);
+      }
+
+      .card-visual {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .project-card.minibar .card-visual {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 245, 255, 0.1) 0%,
+          rgba(124, 58, 237, 0.1) 100%
+        );
+      }
+      .project-card.eventflow .card-visual {
+        background: linear-gradient(
+          135deg,
+          rgba(249, 115, 22, 0.1) 0%,
+          rgba(168, 85, 247, 0.1) 100%
+        );
+      }
+      .card-icon {
+        font-size: 5rem;
+        transition: transform 0.4s ease;
+      }
+      .project-card.minibar .card-icon {
+        color: var(--neon-cyan);
+        text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+      }
+      .project-card.eventflow .card-icon {
+        color: var(--neon-orange);
+        text-shadow: 0 0 30px rgba(249, 115, 22, 0.5);
+      }
+      .project-card:hover .card-icon {
+        transform: scale(1.1);
+      }
+
+      .card-content {
+        padding: 30px;
+      }
+      .card-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        margin-bottom: 16px;
+      }
+      .project-card.minibar .card-badge {
+        background: rgba(0, 245, 255, 0.15);
+        color: var(--neon-cyan);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+      }
+      .project-card.eventflow .card-badge {
+        background: rgba(249, 115, 22, 0.15);
+        color: var(--neon-orange);
+        border: 1px solid rgba(249, 115, 22, 0.3);
+      }
+      .card-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--white);
+        margin-bottom: 12px;
+      }
+      .card-description {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+      .card-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+      .card-feature {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 6px 12px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .card-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+      .project-card.minibar .card-cta {
+        color: var(--neon-cyan);
+      }
+      .project-card.eventflow .card-cta {
+        color: var(--neon-orange);
+      }
+      .card-cta i {
+        transition: transform 0.3s ease;
+      }
+      .project-card:hover .card-cta i {
+        transform: translateX(5px);
+      }
+
+      /* Footer */
+      .footer {
+        padding: 40px 0;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .footer-logo {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(
+          135deg,
+          var(--neon-cyan) 0%,
+          var(--neon-orange) 50%,
+          var(--neon-purple) 100%
+        );
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #0a0a0f;
+        margin: 0 auto 16px;
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+      }
+      .footer p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+      }
+      .footer strong {
+        background: linear-gradient(
+          135deg,
+          var(--neon-cyan) 0%,
+          var(--neon-purple) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .footer-credit {
+        font-size: 0.8rem;
+        opacity: 0.7;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .projects-grid {
+          grid-template-columns: 1fr;
+          gap: 30px;
+          padding: 0 16px;
+        }
+        .hero-title {
+          font-size: 2rem;
+        }
+        .card-visual {
+          height: 160px;
+        }
+        .card-icon {
+          font-size: 4rem;
+        }
+        .card-content {
+          padding: 24px;
+        }
+        .card-title {
+          font-size: 1.25rem;
+        }
+      }
+      @media (max-width: 480px) {
+        .hero-title {
+          font-size: 1.5rem;
+        }
+        .hero-subtitle {
+          font-size: 1rem;
+        }
+        .logo {
+          font-size: 1.5rem;
+        }
+        .card-visual {
+          height: 140px;
+        }
+        .card-icon {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  </head>
+  <body>
+    <canvas id="three-canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <div class="page-content">
+      <header class="header">
+        <div class="container">
+          <a href="#" class="logo">
+            <i class="fas fa-rocket"></i>
+            <span class="logo-text">Optimist Bilişim</span>
+          </a>
+          <p class="header-subtitle">Bilişim ve Elektronik Sistemleri</p>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="container">
+          <div class="hero-badge">
+            <i class="fas fa-code"></i> Yenilikçi Çözümler
+          </div>
+          <h1 class="hero-title">
+            <span class="gradient-text">Projeler</span>
+          </h1>
+          <p class="hero-subtitle">
+            Modern teknolojiler ile geliştirilen, sektöre yön veren yazılım
+            çözümleri
+          </p>
+        </div>
+      </section>
+
+      <section class="projects-section">
+        <div class="container">
+          <div class="projects-grid">
+            <!-- Minibar Card -->
+            <a href="minibar/index.html" class="project-card minibar">
+              <div class="card-visual">
+                <i class="fas fa-wine-bottle card-icon"></i>
+              </div>
+              <div class="card-content">
+                <span class="card-badge">
+                  <i class="fas fa-award"></i> Sektörde Bir İlk
+                </span>
+                <h3 class="card-title">Minibar Takip Sistemi</h3>
+                <p class="card-description">
+                  Yapay zeka destekli, self-learning minibar yönetim sistemi. QR
+                  kod entegrasyonu, akıllı görev yönetimi ve anomali tespiti.
+                </p>
+                <div class="card-features">
+                  <span class="card-feature">AI/ML</span>
+                  <span class="card-feature">QR Kod</span>
+                  <span class="card-feature">PWA</span>
+                  <span class="card-feature">Real-time</span>
+                </div>
+                <span class="card-cta">
+                  Projeyi İncele <i class="fas fa-arrow-right"></i>
+                </span>
+              </div>
+            </a>
+
+            <!-- EventFlow Card -->
+            <a href="eventflow/index.html" class="project-card eventflow">
+              <div class="card-visual">
+                <i class="fas fa-calendar-check card-icon"></i>
+              </div>
+              <div class="card-content">
+                <span class="card-badge">
+                  <i class="fas fa-bolt"></i> Profesyonel Yönetim
+                </span>
+                <h3 class="card-title">EventFlow PRO</h3>
+                <p class="card-description">
+                  Entegre etkinlik yönetim ekosistemi. Gerçek zamanlı check-in,
+                  akıllı ekip organizasyonu ve performans analitiği.
+                </p>
+                <div class="card-features">
+                  <span class="card-feature">WebSocket</span>
+                  <span class="card-feature">Next.js</span>
+                  <span class="card-feature">NestJS</span>
+                  <span class="card-feature">Canvas</span>
+                </div>
+                <span class="card-cta">
+                  Projeyi İncele <i class="fas fa-arrow-right"></i>
+                </span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-logo">
+            <i class="fas fa-rocket"></i>
+          </div>
+          <p>
+            &copy; 2025
+            <strong>Optimist Bilişim ve Elektronik Sistemleri</strong>
+          </p>
+          <p class="footer-credit">
+            Designed & Developed by <strong>Erkan Erdem</strong>
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Three.js Background
+      const initThreeJS = () => {
+        const threeCanvas = document.getElementById("three-canvas");
+        if (!threeCanvas) return;
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+        );
+        const renderer = new THREE.WebGLRenderer({
+          canvas: threeCanvas,
+          alpha: true,
+          antialias: true,
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Multi-colored particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 2000;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for (let i = 0; i < particlesCount * 3; i++) {
+          posArray[i] = (Math.random() - 0.5) * 12;
+        }
+
+        particlesGeometry.setAttribute(
+          "position",
+          new THREE.BufferAttribute(posArray, 3)
+        );
+
+        const particlesMaterial = new THREE.PointsMaterial({
+          size: 0.012,
+          color: 0xa855f7,
+          transparent: true,
+          opacity: 0.7,
+          blending: THREE.AdditiveBlending,
+        });
+
+        const particlesMesh = new THREE.Points(
+          particlesGeometry,
+          particlesMaterial
+        );
+        scene.add(particlesMesh);
+
+        // Floating shapes
+        const shapes = [];
+        const geometries = [
+          new THREE.IcosahedronGeometry(0.25, 0),
+          new THREE.OctahedronGeometry(0.2, 0),
+          new THREE.TetrahedronGeometry(0.25, 0),
+        ];
+        const colors = [0x00f5ff, 0xff6b35, 0xa855f7];
+
+        for (let i = 0; i < 15; i++) {
+          const geometry =
+            geometries[Math.floor(Math.random() * geometries.length)];
+          const material = new THREE.MeshBasicMaterial({
+            color: colors[Math.floor(Math.random() * colors.length)],
+            wireframe: true,
+            transparent: true,
+            opacity: 0.2,
+          });
+          const shape = new THREE.Mesh(geometry, material);
+          shape.position.set(
+            (Math.random() - 0.5) * 16,
+            (Math.random() - 0.5) * 16,
+            (Math.random() - 0.5) * 10
+          );
+          shape.userData = {
+            rotationSpeed: {
+              x: (Math.random() - 0.5) * 0.01,
+              y: (Math.random() - 0.5) * 0.01,
+              z: (Math.random() - 0.5) * 0.01,
+            },
+            floatSpeed: Math.random() * 0.006 + 0.003,
+            floatOffset: Math.random() * Math.PI * 2,
+          };
+          shapes.push(shape);
+          scene.add(shape);
+        }
+
+        camera.position.z = 5;
+
+        let mouseX = 0,
+          mouseY = 0,
+          targetX = 0,
+          targetY = 0;
+
+        document.addEventListener("mousemove", (event) => {
+          mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+          mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+          requestAnimationFrame(animate);
+          const elapsedTime = clock.getElapsedTime();
+
+          targetX += (mouseX - targetX) * 0.05;
+          targetY += (mouseY - targetY) * 0.05;
+
+          particlesMesh.rotation.y = elapsedTime * 0.02;
+          particlesMesh.rotation.x = targetY * 0.15;
+          particlesMesh.rotation.y += targetX * 0.15;
+
+          shapes.forEach((shape) => {
+            shape.rotation.x += shape.userData.rotationSpeed.x;
+            shape.rotation.y += shape.userData.rotationSpeed.y;
+            shape.rotation.z += shape.userData.rotationSpeed.z;
+            shape.position.y +=
+              Math.sin(
+                elapsedTime * shape.userData.floatSpeed +
+                  shape.userData.floatOffset
+              ) * 0.0015;
+          });
+
+          camera.position.x += (targetX * 0.3 - camera.position.x) * 0.02;
+          camera.position.y += (targetY * 0.3 - camera.position.y) * 0.02;
+          camera.lookAt(scene.position);
+
+          renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener("resize", () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+      };
+
+      document.addEventListener("DOMContentLoaded", initThreeJS);
+    </script>
+  </body>
+</html>

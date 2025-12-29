@@ -1,0 +1,2278 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      EventFlow PRO - Entegre Etkinlik Yönetim Ekosistemi | Erkan Erdem
+    </title>
+    <meta
+      name="description"
+      content="Yapay zeka destekli, gerçek zamanlı etkinlik yönetim sistemi. Akıllı ekip organizasyonu, check-in takibi ve performans analitiği."
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --primary: #f97316;
+        --primary-dark: #ea580c;
+        --secondary: #8b5cf6;
+        --accent: #06b6d4;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --dark: #0f172a;
+        --dark-light: #1e293b;
+        --gray: #64748b;
+        --gray-light: #94a3b8;
+        --light: #f1f5f9;
+        --white: #fff;
+        --gradient-1: linear-gradient(135deg, #f97316 0%, #8b5cf6 100%);
+        --gradient-2: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        --gradient-3: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        --radius: 12px;
+        --radius-lg: 20px;
+        --neon-orange: #ff6b35;
+        --neon-purple: #a855f7;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* ===== THREE.JS CYBERPUNK BACKGROUND ===== */
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        color: #e0e0e0;
+        line-height: 1.6;
+        overflow-x: hidden;
+        background: #0a0a0f;
+        position: relative;
+      }
+
+      #three-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .scanlines {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.1),
+          rgba(0, 0, 0, 0.1) 1px,
+          transparent 1px,
+          transparent 2px
+        );
+        opacity: 0.2;
+      }
+
+      .page-content {
+        position: relative;
+        z-index: 10;
+      }
+
+      section {
+        background: transparent !important;
+        position: relative;
+      }
+
+      .section-glass {
+        background: rgba(10, 10, 15, 0.75);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-radius: var(--radius-lg);
+        padding: 40px;
+        border: 1px solid rgba(249, 115, 22, 0.1);
+      }
+
+      .neon-glow-orange {
+        text-shadow: 0 0 10px #ff6b35, 0 0 20px #ff6b35, 0 0 40px #ff6b35;
+      }
+      .neon-glow-purple {
+        text-shadow: 0 0 10px #a855f7, 0 0 20px #a855f7, 0 0 40px #a855f7;
+      }
+
+      .glass {
+        background: rgba(10, 10, 15, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(249, 115, 22, 0.1);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 16px 0;
+        transition: all 0.3s ease;
+      }
+      .navbar.scrolled {
+        background: rgba(10, 10, 15, 0.9);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+        border-bottom: 1px solid rgba(249, 115, 22, 0.1);
+        padding: 12px 0;
+      }
+      .nav-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #e0e0e0;
+      }
+      .logo i {
+        color: var(--neon-orange);
+        font-size: 1.75rem;
+      }
+      .logo strong {
+        color: var(--neon-orange);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: #e0e0e0;
+        font-weight: 500;
+        transition: all 0.3s;
+      }
+      .nav-links a:hover {
+        color: var(--neon-orange);
+        text-shadow: 0 0 10px var(--neon-orange);
+      }
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--neon-orange);
+        cursor: pointer;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: var(--radius);
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 0.95rem;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #ff6b35 0%, #a855f7 100%);
+        color: #0a0a0f;
+        box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
+        font-weight: 700;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(249, 115, 22, 0.6);
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--neon-orange);
+        border: 2px solid var(--neon-orange);
+      }
+      .btn-outline:hover {
+        background: var(--neon-orange);
+        color: #0a0a0f;
+        box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+      }
+      .btn-sm {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+      }
+      .btn-lg {
+        padding: 16px 32px;
+        font-size: 1rem;
+      }
+
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding: 120px 0 80px;
+        overflow: hidden;
+      }
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+      }
+      .hero-shape {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.5;
+      }
+      .shape-1 {
+        width: 600px;
+        height: 600px;
+        background: var(--primary);
+        top: -200px;
+        right: -200px;
+        opacity: 0.15;
+      }
+      .shape-2 {
+        width: 400px;
+        height: 400px;
+        background: var(--secondary);
+        bottom: -100px;
+        left: -100px;
+        opacity: 0.1;
+      }
+      .shape-3 {
+        width: 300px;
+        height: 300px;
+        background: var(--accent);
+        top: 50%;
+        left: 50%;
+        opacity: 0.1;
+      }
+      .hero-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(249, 115, 22, 0.15);
+        color: var(--neon-orange);
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+        border: 1px solid rgba(249, 115, 22, 0.3);
+      }
+      .hero-badge i {
+        color: #ffd700;
+      }
+      .hero-title {
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        color: #ffffff;
+      }
+      .gradient-text {
+        background: linear-gradient(135deg, #ff6b35 0%, #a855f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: none;
+      }
+      .hero-subtitle {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 60px;
+      }
+      .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 48px;
+        flex-wrap: wrap;
+      }
+      .stat-item {
+        text-align: center;
+      }
+      .stat-number {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--neon-orange);
+        text-shadow: 0 0 10px var(--neon-orange);
+      }
+      .stat-label {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+      }
+
+      /* Lightbox Modal */
+      .lightbox-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        cursor: zoom-out;
+      }
+      .lightbox-overlay.active {
+        display: flex;
+        opacity: 1;
+      }
+      .lightbox-image {
+        max-width: 95%;
+        max-height: 95vh;
+        border-radius: var(--radius);
+        border: 2px solid rgba(249, 115, 22, 0.3);
+        box-shadow: 0 0 60px rgba(249, 115, 22, 0.3);
+        transform: scale(0.9);
+        transition: transform 0.3s ease;
+      }
+      .lightbox-overlay.active .lightbox-image {
+        transform: scale(1);
+      }
+      .lightbox-close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        font-size: 2.5rem;
+        color: var(--neon-orange);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-shadow: 0 0 10px var(--neon-orange);
+      }
+      .lightbox-close:hover {
+        transform: scale(1.2) rotate(90deg);
+        color: #a855f7;
+        text-shadow: 0 0 20px #a855f7;
+      }
+      .lightbox-hint {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.85rem;
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  </head>
+  <body>
+    <canvas id="three-canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <div class="page-content">
+      <nav class="navbar" id="navbar">
+        <div class="container nav-content">
+          <a href="#" class="logo">
+            <i class="fas fa-calendar-check"></i>
+            <span>Event<strong>Flow</strong> PRO</span>
+          </a>
+          <div class="nav-links" id="navLinks">
+            <a href="#features">Özellikler</a>
+            <a href="#realtime">Gerçek Zamanlı</a>
+            <a href="#panels">Paneller</a>
+            <a href="#benefits">Avantajlar</a>
+          </div>
+          <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </nav>
+
+      <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-content">
+          <button class="mobile-menu-close" onclick="toggleMobileMenu()">
+            <i class="fas fa-times"></i>
+          </button>
+          <a href="#features" onclick="toggleMobileMenu()">Özellikler</a>
+          <a href="#realtime" onclick="toggleMobileMenu()">Gerçek Zamanlı</a>
+          <a href="#panels" onclick="toggleMobileMenu()">Paneller</a>
+          <a href="#benefits" onclick="toggleMobileMenu()">Avantajlar</a>
+        </div>
+      </div>
+
+      <section class="hero">
+        <div class="hero-bg">
+          <div class="hero-shape shape-1"></div>
+          <div class="hero-shape shape-2"></div>
+          <div class="hero-shape shape-3"></div>
+        </div>
+        <div class="container hero-content">
+          <div class="hero-badge">
+            <i class="fas fa-award"></i> Entegre Etkinlik Yönetimi
+          </div>
+          <h1 class="hero-title">
+            Akıllı Etkinlik<br /><span class="gradient-text"
+              >Yönetim Ekosistemi</span
+            >
+          </h1>
+          <p class="hero-subtitle">
+            Gerçek zamanlı check-in takibi, akıllı ekip organizasyonu ve
+            performans analitiği ile etkinlik operasyonlarınızı profesyonel
+            seviyeye taşıyın.
+          </p>
+          <div class="hero-buttons">
+            <a href="#realtime" class="btn btn-primary btn-lg">
+              <i class="fas fa-bolt"></i> Gerçek Zamanlı Sistemi Keşfet
+            </a>
+            <a href="#panels" class="btn btn-outline btn-lg">
+              <i class="fas fa-th-large"></i> Panelleri İncele
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-number">%60</span>
+              <span class="stat-label">Verimlilik Artışı</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">%99</span>
+              <span class="stat-label">Check-in Doğruluğu</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">7/24</span>
+              <span class="stat-label">Canlı Takip</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">🚀</span>
+              <span class="stat-label">Profesyonel</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
+
+<section class="innovation-banner">
+  <div class="container">
+    <div class="innovation-content">
+      <div class="innovation-icon"><i class="fas fa-lightbulb"></i></div>
+      <div class="innovation-text">
+        <h3>Profesyonel Etkinlik Yönetimi</h3>
+        <p>
+          EventFlow PRO, otelcilik ve etkinlik sektöründe kapsamlı bir yönetim
+          çözümü sunmaktadır. <strong>Erkan Erdem</strong> tarafından tasarlanan
+          bu sistem, geleneksel etkinlik yönetim yöntemlerini tamamen
+          dönüştürmektedir.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="realtime-system" id="realtime">
+  <div class="container">
+    <div class="section-header light">
+      <span class="section-badge realtime"
+        ><i class="fas fa-bolt"></i> Gerçek Zamanlı</span
+      >
+      <h2 class="section-title">WebSocket Canlı Takip Sistemi</h2>
+      <p class="section-subtitle">
+        Anlık check-in bildirimleri, canlı doluluk takibi ve gerçek zamanlı ekip
+        koordinasyonu
+      </p>
+    </div>
+    <div class="realtime-features">
+      <div class="realtime-main-visual">
+        <div class="realtime-pulse">
+          <div class="realtime-core"><i class="fas fa-wifi"></i></div>
+          <div class="pulse pulse-1"></div>
+          <div class="pulse pulse-2"></div>
+          <div class="pulse pulse-3"></div>
+        </div>
+        <div class="realtime-connections">
+          <div class="realtime-node node-1">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <div class="realtime-node node-2">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="realtime-node node-3"><i class="fas fa-bell"></i></div>
+          <div class="realtime-node node-4"><i class="fas fa-users"></i></div>
+        </div>
+      </div>
+      <div class="realtime-cards">
+        <div class="realtime-card">
+          <div class="realtime-card-icon">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <h3>Anlık Check-in</h3>
+          <p>
+            Misafir check-in işlemleri anında tüm ekibe bildirilir. Masa
+            durumları canlı güncellenir.
+          </p>
+        </div>
+        <div class="realtime-card">
+          <div class="realtime-card-icon"><i class="fas fa-chart-pie"></i></div>
+          <h3>Canlı Doluluk</h3>
+          <p>
+            Etkinlik doluluk oranları, masa durumları ve kapasite bilgileri
+            anlık olarak izlenir.
+          </p>
+        </div>
+        <div class="realtime-card">
+          <div class="realtime-card-icon">
+            <i class="fas fa-users-gear"></i>
+          </div>
+          <h3>Ekip Koordinasyonu</h3>
+          <p>
+            Personel görevleri, masa atamaları ve ekip değişiklikleri gerçek
+            zamanlı senkronize edilir.
+          </p>
+        </div>
+        <div class="realtime-card">
+          <div class="realtime-card-icon"><i class="fas fa-bell"></i></div>
+          <h3>Akıllı Bildirimler</h3>
+          <p>
+            VIP misafir gelişi, kapasite uyarıları ve önemli olaylar anında
+            bildirilir.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="realtime-stats-bar">
+      <div class="realtime-stat">
+        <i class="fas fa-bolt"></i>
+        <span class="realtime-stat-value">&lt;100ms</span>
+        <span class="realtime-stat-label">Gecikme Süresi</span>
+      </div>
+      <div class="realtime-stat">
+        <i class="fas fa-users"></i>
+        <span class="realtime-stat-value">∞</span>
+        <span class="realtime-stat-label">Eşzamanlı Kullanıcı</span>
+      </div>
+      <div class="realtime-stat">
+        <i class="fas fa-sync"></i>
+        <span class="realtime-stat-value">7/24</span>
+        <span class="realtime-stat-label">Aktif Bağlantı</span>
+      </div>
+      <div class="realtime-stat">
+        <i class="fas fa-shield-halved"></i>
+        <span class="realtime-stat-value">%100</span>
+        <span class="realtime-stat-label">Güvenli İletişim</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="team-organization" id="team-org">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge"
+        ><i class="fas fa-sitemap"></i> Ekip Organizasyonu</span
+      >
+      <h2 class="section-title">5 Adımlı Akıllı Wizard Sistemi</h2>
+      <p class="section-subtitle">
+        Canvas tabanlı masa gruplandırma, sürükle-bırak ekip oluşturma ve
+        otomatik personel atama
+      </p>
+    </div>
+    <div class="wizard-showcase">
+      <div class="wizard-flow">
+        <div class="wizard-step">
+          <div class="wizard-step-number">1</div>
+          <div class="wizard-step-icon"><i class="fas fa-layer-group"></i></div>
+          <h4>Masa Grupları</h4>
+          <p>Canvas üzerinde masaları gruplandır</p>
+        </div>
+        <div class="wizard-arrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="wizard-step">
+          <div class="wizard-step-number">2</div>
+          <div class="wizard-step-icon"><i class="fas fa-users"></i></div>
+          <h4>Takım Oluştur</h4>
+          <p>Grupları takımlara dönüştür</p>
+        </div>
+        <div class="wizard-arrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="wizard-step highlight">
+          <div class="wizard-step-number">3</div>
+          <div class="wizard-step-icon ai-glow">
+            <i class="fas fa-crown"></i>
+          </div>
+          <h4>Lider Ata</h4>
+          <p>Her takıma kaptan belirle</p>
+        </div>
+        <div class="wizard-arrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="wizard-step">
+          <div class="wizard-step-number">4</div>
+          <div class="wizard-step-icon"><i class="fas fa-user-plus"></i></div>
+          <h4>Personel Ata</h4>
+          <p>Kategorilere göre personel dağıt</p>
+        </div>
+        <div class="wizard-arrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="wizard-step">
+          <div class="wizard-step-number">5</div>
+          <div class="wizard-step-icon">
+            <i class="fas fa-check-double"></i>
+          </div>
+          <h4>Onayla</h4>
+          <p>Organizasyonu kaydet</p>
+        </div>
+      </div>
+      <div class="wizard-demo">
+        <div class="wizard-demo-header">
+          <i class="fas fa-sitemap"></i>
+          <span>Ekip Organizasyonu - Gala Gecesi</span>
+          <span class="wizard-badge">Canvas Aktif</span>
+        </div>
+        <div class="wizard-canvas">
+          <div class="canvas-group group-1">
+            <span class="group-label">Takım A</span>
+            <div class="canvas-tables">
+              <div class="canvas-table">T1</div>
+              <div class="canvas-table">T2</div>
+              <div class="canvas-table">T3</div>
+            </div>
+            <div class="group-leader">
+              <i class="fas fa-crown"></i> Ahmet K.
+            </div>
+          </div>
+          <div class="canvas-group group-2">
+            <span class="group-label">Takım B</span>
+            <div class="canvas-tables">
+              <div class="canvas-table">T4</div>
+              <div class="canvas-table">T5</div>
+            </div>
+            <div class="group-leader">
+              <i class="fas fa-crown"></i> Mehmet Y.
+            </div>
+          </div>
+          <div class="canvas-stage"><i class="fas fa-music"></i> SAHNE</div>
+        </div>
+        <div class="wizard-demo-footer">
+          <i class="fas fa-check-circle"></i>
+          <span>5 masa • 2 takım • 12 personel atandı</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Temel Özellikler</span>
+      <h2 class="section-title">Kapsamlı Etkinlik Yönetim Araçları</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon icon-1">
+          <i class="fas fa-calendar-plus"></i>
+        </div>
+        <h3>Etkinlik Yönetimi</h3>
+        <p>
+          Detaylı etkinlik oluşturma, mekan seçimi, kapasite planlaması ve
+          timeline yönetimi.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-2"><i class="fas fa-ticket"></i></div>
+        <h3>Rezervasyon Sistemi</h3>
+        <p>
+          Masa bazlı rezervasyon, misafir bilgileri, özel istekler ve VIP
+          yönetimi.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-3"><i class="fas fa-qrcode"></i></div>
+        <h3>QR Check-in</h3>
+        <p>Hızlı QR kod tarama, anlık check-in ve masa yönlendirme sistemi.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-4"><i class="fas fa-users-gear"></i></div>
+        <h3>Personel Yönetimi</h3>
+        <p>
+          Personel profilleri, pozisyon yönetimi, performans takibi ve zimmet
+          sistemi.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-5"><i class="fas fa-chart-bar"></i></div>
+        <h3>Analitik Dashboard</h3>
+        <p>
+          Gerçek zamanlı istatistikler, doluluk grafikleri ve performans
+          raporları.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-6"><i class="fas fa-building"></i></div>
+        <h3>Mekan Yönetimi</h3>
+        <p>Çoklu mekan desteği, layout tasarımı ve kapasite optimizasyonu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <section class="panels" id="panels">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-badge">Kullanıcı Panelleri</span>
+            <h2 class="section-title">Her Rol İçin Özel Tasarım</h2>
+          </div>
+          <div class="panel-showcase">
+            <div class="panel-content">
+              <div class="panel-badge admin"><i class="fas fa-crown"></i> Yönetici</div>
+              <h3 class="panel-title">Tam Kontrol Merkezi</h3>
+              <p class="panel-description">
+                Tüm etkinlik operasyonlarını tek noktadan yönetin. Dashboard, kullanıcı yetkilendirmesi ve kapsamlı raporlara erişim.
+              </p>
+              <ul class="panel-features">
+                <li><i class="fas fa-check-circle"></i> Etkinlik oluşturma ve yönetimi</li>
+                <li><i class="fas fa-check-circle"></i> Personel ve rol yönetimi</li>
+                <li><i class="fas fa-check-circle"></i> Gerçek zamanlı dashboard</li>
+                <li><i class="fas fa-check-circle"></i> Mekan ve layout tasarımı</li>
+                <li><i class="fas fa-check-circle"></i> Kapsamlı raporlar</li>
+                <li><i class="fas fa-check-circle"></i> Sistem ayarları</li>
+              </ul>
+            </div>
+            <div class="panel-visual admin-visual">
+              <div class="mock-dashboard">
+                <div class="mock-header">
+                  <div class="mock-dots"><span></span><span></span><span></span></div>
+                  <span class="mock-title">Yönetim Paneli</span>
+                </div>
+                <div class="mock-content">
+                  <div class="mock-sidebar">
+                    <div class="mock-menu-item active"><i class="fas fa-home"></i></div>
+                    <div class="mock-menu-item"><i class="fas fa-calendar"></i></div>
+                    <div class="mock-menu-item"><i class="fas fa-users"></i></div>
+                    <div class="mock-menu-item"><i class="fas fa-chart-bar"></i></div>
+                    <div class="mock-menu-item"><i class="fas fa-cog"></i></div>
+                  </div>
+                  <div class="mock-main">
+                    <div class="mock-stats">
+                      <div class="mock-stat-card"><i class="fas fa-calendar-check"></i><span>12 Etkinlik</span></div>
+                      <div class="mock-stat-card"><i class="fas fa-users"></i><span>156 Personel</span></div>
+                      <div class="mock-stat-card"><i class="fas fa-check"></i><span>%94 Doluluk</span></div>
+                    </div>
+                    <div class="mock-chart"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-showcase reverse">
+            <div class="panel-content">
+              <div class="panel-badge organizer"><i class="fas fa-clipboard-list"></i> Organizatör</div>
+              <h3 class="panel-title">Etkinlik Operasyonları</h3>
+              <p class="panel-description">
+                Etkinlik günü operasyonlarını yönetin. Check-in takibi, ekip koordinasyonu ve anlık durum izleme.
+              </p>
+              <ul class="panel-features">
+                <li><i class="fas fa-check-circle"></i> Canlı check-in takibi</li>
+                <li><i class="fas fa-check-circle"></i> Masa durumu izleme</li>
+                <li><i class="fas fa-check-circle"></i> Ekip organizasyonu wizard</li>
+                <li><i class="fas fa-check-circle"></i> Rezervasyon yönetimi</li>
+                <li><i class="fas fa-check-circle"></i> VIP misafir takibi</li>
+                <li><i class="fas fa-check-circle"></i> Anlık bildirimler</li>
+              </ul>
+            </div>
+            <div class="panel-visual organizer-visual">
+              <div class="mock-dashboard">
+                <div class="mock-header">
+                  <div class="mock-dots"><span></span><span></span><span></span></div>
+                  <span class="mock-title">Organizatör Paneli</span>
+                </div>
+                <div class="mock-content">
+                  <div class="mock-sidebar">
+                    <div class="mock-menu-item active"><i class="fas fa-user-check"></i></div>
+                    <div class="mock-menu-item"><i class="fas fa-table"></i></div>
+                    <div class="mock-menu-item"><i class="fas fa-sitemap"></i></div>
+                  </div>
+                  <div class="mock-main">
+                    <div class="mock-table">
+                      <div class="mock-table-header"><span>Misafir</span><span>Masa</span><span>Durum</span></div>
+                      <div class="mock-table-row"><span>Ahmet Yılmaz</span><span>T-12</span><span class="status-ok">●</span></div>
+                      <div class="mock-table-row"><span>Ayşe Kaya</span><span>T-08</span><span class="status-ok">●</span></div>
+                      <div class="mock-table-row"><span>Mehmet Demir</span><span>T-15</span><span class="status-warning">●</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-showcase">
+            <div class="panel-content">
+              <div class="panel-badge leader"><i class="fas fa-user-tie"></i> Takım Lideri</div>
+              <h3 class="panel-title">Saha Operasyonları</h3>
+              <p class="panel-description">
+                Mobil uyumlu arayüz ile sahada ekibinizi yönetin. Görev takibi, performans değerlendirme ve anlık iletişim.
+              </p>
+              <ul class="panel-features">
+                <li><i class="fas fa-check-circle"></i> Takım üyelerini görüntüleme</li>
+                <li><i class="fas fa-check-circle"></i> Görev atama ve takip</li>
+                <li><i class="fas fa-check-circle"></i> Performans değerlendirme</li>
+                <li><i class="fas fa-check-circle"></i> Masa durumu güncelleme</li>
+                <li><i class="fas fa-check-circle"></i> Anlık bildirimler</li>
+                <li><i class="fas fa-check-circle"></i> Mobil uyumlu tasarım</li>
+              </ul>
+            </div>
+            <div class="panel-visual leader-visual">
+              <div class="mock-mobile">
+                <div class="mock-mobile-header">
+                  <span>09:41</span>
+                  <div class="mock-mobile-notch"></div>
+                  <span><i class="fas fa-wifi"></i></span>
+                </div>
+                <div class="mock-mobile-content">
+                  <div class="mock-mobile-title"><i class="fas fa-users"></i> Takımım</div>
+                  <div class="mock-task-list">
+                    <div class="mock-task high"><span>🟢</span> Ali Veli - Aktif</div>
+                    <div class="mock-task high"><span>🟢</span> Ayşe Yılmaz - Aktif</div>
+                    <div class="mock-task medium"><span>🟡</span> Mehmet K. - Molada</div>
+                  </div>
+                  <button class="mock-mobile-btn"><i class="fas fa-star"></i> Değerlendir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="technology" id="technology">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-badge"><i class="fas fa-microchip"></i> Teknoloji</span>
+            <h2 class="section-title">Modern Teknoloji Stack</h2>
+            <p class="section-subtitle">En güncel teknolojiler ile geliştirilmiş, ölçeklenebilir mimari</p>
+          </div>
+          <div class="tech-grid">
+            <div class="tech-card">
+              <div class="tech-icon"><i class="fab fa-react"></i></div>
+              <h3>Next.js 15</h3>
+              <p>React tabanlı modern frontend framework. Server-side rendering ve optimum performans.</p>
+            </div>
+            <div class="tech-card">
+              <div class="tech-icon"><i class="fab fa-node-js"></i></div>
+              <h3>NestJS Backend</h3>
+              <p>TypeScript tabanlı, modüler ve ölçeklenebilir backend mimarisi.</p>
+            </div>
+            <div class="tech-card">
+              <div class="tech-icon"><i class="fas fa-database"></i></div>
+              <h3>PostgreSQL</h3>
+              <p>Güçlü ilişkisel veritabanı. TypeORM ile entegre, optimize sorgular.</p>
+            </div>
+            <div class="tech-card">
+              <div class="tech-icon"><i class="fas fa-plug"></i></div>
+              <h3>WebSocket</h3>
+              <p>Socket.IO ile gerçek zamanlı iletişim. Anlık bildirimler ve canlı güncellemeler.</p>
+            </div>
+          </div>
+          <div class="tech-highlight">
+            <div class="tech-highlight-icon"><i class="fas fa-docker"></i></div>
+            <div class="tech-highlight-content">
+              <h3>Docker & Cloud Ready</h3>
+              <p>
+                Sistem, Docker containerization ile her ortamda çalışacak şekilde tasarlandı. 
+                Coolify, Railway veya herhangi bir cloud platformunda kolayca deploy edilebilir.
+                CI/CD pipeline desteği ile sürekli entegrasyon ve dağıtım.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="benefits" id="benefits">
+        <div class="container">
+          <div class="section-header light">
+            <span class="section-badge">Avantajlar</span>
+            <h2 class="section-title">İşletmenize Kattığı Değer</h2>
+          </div>
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <div class="benefit-icon"><i class="fas fa-rocket"></i></div>
+              <h3>%60 Verimlilik Artışı</h3>
+              <p>Otomatik ekip organizasyonu ve akıllı görev dağılımı ile operasyonel verimlilik.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-icon"><i class="fas fa-bullseye"></i></div>
+              <h3>%99 Check-in Doğruluğu</h3>
+              <p>QR kod tabanlı check-in sistemi ile hatasız misafir takibi.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-icon"><i class="fas fa-face-smile"></i></div>
+              <h3>Misafir Memnuniyeti</h3>
+              <p>Hızlı check-in, doğru masa yönlendirme ve profesyonel servis.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-icon"><i class="fas fa-eye"></i></div>
+              <h3>Tam Görünürlük</h3>
+              <p>Gerçek zamanlı dashboard ile tüm operasyonları anlık izleyin.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-icon"><i class="fas fa-users-gear"></i></div>
+              <h3>Ekip Koordinasyonu</h3>
+              <p>Akıllı wizard ile dakikalar içinde ekip organizasyonu.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-icon"><i class="fas fa-chart-line"></i></div>
+              <h3>Veri Odaklı Kararlar</h3>
+              <p>Detaylı raporlar ve analizler ile stratejik planlama.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="creator">
+        <div class="container">
+          <div class="creator-content">
+            <div class="creator-badge"><i class="fas fa-code"></i> Tasarımcı & Geliştirici</div>
+            <h2>Erkan Erdem</h2>
+            <p>
+              EventFlow PRO, otelcilik ve etkinlik sektöründe kapsamlı bir yönetim çözümü 
+              sunmaktadır. Gerçek zamanlı WebSocket iletişimi, akıllı ekip organizasyonu wizard'ı 
+              ve modern teknoloji stack'i ile <strong>profesyonel seviyede</strong> etkinlik 
+              yönetimi sağlamaktadır.
+            </p>
+            <div class="creator-signature">
+              <span>Designed & Developed by</span>
+              <strong>Erkan Erdem</strong>
+              <span class="creator-year">2025</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-simple">
+            <div class="footer-logo-icon"><i class="fas fa-calendar-check"></i></div>
+            <p>&copy; 2025 <strong>Optimist Bilişim ve Elektronik Sistemleri</strong></p>
+            <p class="footer-credit">Designed & Developed by <strong>Erkan Erdem</strong></p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
+      <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+      <img src="" alt="Büyütülmüş Görsel" class="lightbox-image" id="lightboxImage" onclick="event.stopPropagation()" />
+      <span class="lightbox-hint">Kapatmak için herhangi bir yere tıklayın veya ESC tuşuna basın</span>
+    </div>
+
+    <style>
+      /* ===== SECTION STYLES ===== */
+      section {
+        padding: 100px 0;
+      }
+      .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      .section-header.light {
+        color: var(--white);
+      }
+      .section-header.light .section-subtitle {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(249, 115, 22, 0.15);
+        color: var(--neon-orange);
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-bottom: 16px;
+        border: 1px solid rgba(249, 115, 22, 0.3);
+      }
+      .section-badge.realtime {
+        background: rgba(168, 85, 247, 0.15);
+        color: var(--neon-purple);
+        border-color: rgba(168, 85, 247, 0.3);
+      }
+      .section-title {
+        font-size: clamp(2rem, 4vw, 2.75rem);
+        font-weight: 800;
+        margin-bottom: 16px;
+        color: #ffffff;
+      }
+      .section-subtitle {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.7);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* ===== INNOVATION BANNER ===== */
+      .innovation-banner {
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+        padding: 60px 0;
+        border-top: 1px solid rgba(249, 115, 22, 0.3);
+        border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+        backdrop-filter: blur(5px);
+      }
+      .innovation-content {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        color: var(--white);
+      }
+      .innovation-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(249, 115, 22, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        flex-shrink: 0;
+        border: 1px solid rgba(249, 115, 22, 0.4);
+        color: var(--neon-orange);
+      }
+      .innovation-text h3 {
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+        color: var(--neon-orange);
+      }
+      .innovation-text p {
+        opacity: 0.9;
+        line-height: 1.7;
+      }
+      .innovation-text strong {
+        color: #ffd700;
+      }
+
+      /* ===== REALTIME SYSTEM ===== */
+      .realtime-system {
+        background: transparent;
+        position: relative;
+        overflow: hidden;
+      }
+      .realtime-features {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        margin-bottom: 60px;
+      }
+      .realtime-main-visual {
+        position: relative;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .realtime-pulse {
+        position: relative;
+        width: 150px;
+        height: 150px;
+      }
+      .realtime-core {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--neon-orange) 0%, var(--neon-purple) 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        color: #0a0a0f;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 0 40px rgba(249, 115, 22, 0.5);
+      }
+      .pulse {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 2px solid var(--neon-orange);
+        animation: pulse 2s ease-out infinite;
+      }
+      .pulse.pulse-2 {
+        animation-delay: 0.5s;
+        border-color: var(--neon-purple);
+      }
+      .pulse.pulse-3 {
+        animation-delay: 1s;
+      }
+      @keyframes pulse {
+        0% { transform: scale(1); opacity: 0.8; }
+        100% { transform: scale(2.5); opacity: 0; }
+      }
+      .realtime-connections {
+        position: absolute;
+        inset: 0;
+      }
+      .realtime-node {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background: rgba(10, 10, 15, 0.9);
+        border: 2px solid var(--neon-orange);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--neon-orange);
+        font-size: 1.25rem;
+        box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
+      }
+      .realtime-node.node-1 { top: 10%; left: 10%; }
+      .realtime-node.node-2 { top: 10%; right: 10%; border-color: var(--neon-purple); color: var(--neon-purple); box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
+      .realtime-node.node-3 { bottom: 10%; left: 10%; border-color: #10b981; color: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+      .realtime-node.node-4 { bottom: 10%; right: 10%; }
+      .realtime-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .realtime-card {
+        background: rgba(10, 10, 15, 0.7);
+        border-radius: var(--radius);
+        padding: 24px;
+        border: 1px solid rgba(249, 115, 22, 0.2);
+        backdrop-filter: blur(10px);
+      }
+      .realtime-card:hover {
+        border-color: rgba(249, 115, 22, 0.4);
+        box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+      }
+      .realtime-card-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--neon-orange) 0%, var(--neon-purple) 100%);
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        color: var(--white);
+        margin-bottom: 16px;
+      }
+      .realtime-card h3 {
+        color: var(--white);
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+      .realtime-card p {
+        color: var(--gray-light);
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+      .realtime-stats-bar {
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+        flex-wrap: wrap;
+        padding: 40px;
+        background: rgba(249, 115, 22, 0.05);
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(249, 115, 22, 0.2);
+        backdrop-filter: blur(10px);
+      }
+      .realtime-stat {
+        text-align: center;
+        color: var(--white);
+      }
+      .realtime-stat i {
+        font-size: 1.5rem;
+        color: var(--neon-orange);
+        margin-bottom: 8px;
+        display: block;
+      }
+      .realtime-stat-value {
+        display: block;
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--neon-orange);
+        text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+      }
+      .realtime-stat-label {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      /* ===== TEAM ORGANIZATION / WIZARD ===== */
+      .team-organization {
+        background: transparent;
+      }
+      .wizard-showcase {
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+      }
+      .wizard-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .wizard-step {
+        text-align: center;
+        padding: 20px;
+        background: rgba(10, 10, 15, 0.6);
+        border-radius: var(--radius-lg);
+        min-width: 140px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+      }
+      .wizard-step.highlight {
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.3) 0%, rgba(168, 85, 247, 0.3) 100%);
+        color: var(--white);
+        border-color: rgba(249, 115, 22, 0.5);
+      }
+      .wizard-step-number {
+        width: 28px;
+        height: 28px;
+        background: var(--neon-orange);
+        color: #0a0a0f;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        margin: 0 auto 12px;
+      }
+      .wizard-step-icon {
+        font-size: 1.5rem;
+        color: var(--neon-orange);
+        margin-bottom: 10px;
+      }
+      .wizard-step-icon.ai-glow {
+        animation: aiGlow 2s ease-in-out infinite;
+      }
+      @keyframes aiGlow {
+        0%, 100% { filter: drop-shadow(0 0 5px rgba(249, 115, 22, 0.5)); }
+        50% { filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.8)); }
+      }
+      .wizard-step h4 {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+        color: #ffffff;
+      }
+      .wizard-step p {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .wizard-arrow {
+        color: var(--neon-orange);
+        font-size: 1.25rem;
+      }
+      .wizard-demo {
+        max-width: 600px;
+        margin: 0 auto;
+        background: rgba(10, 10, 15, 0.8);
+        border-radius: var(--radius-lg);
+        box-shadow: 0 0 30px rgba(249, 115, 22, 0.2);
+        overflow: hidden;
+        border: 1px solid rgba(249, 115, 22, 0.3);
+        backdrop-filter: blur(10px);
+      }
+      .wizard-demo-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        background: rgba(249, 115, 22, 0.1);
+        color: var(--neon-orange);
+        font-weight: 600;
+        border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+      }
+      .wizard-badge {
+        margin-left: auto;
+        background: linear-gradient(135deg, var(--neon-orange) 0%, var(--neon-purple) 100%);
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        color: #0a0a0f;
+      }
+      .wizard-canvas {
+        padding: 30px;
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+      }
+      .canvas-group {
+        background: rgba(249, 115, 22, 0.1);
+        border: 2px dashed rgba(249, 115, 22, 0.4);
+        border-radius: var(--radius);
+        padding: 15px;
+        min-width: 150px;
+      }
+      .canvas-group.group-2 {
+        background: rgba(168, 85, 247, 0.1);
+        border-color: rgba(168, 85, 247, 0.4);
+      }
+      .group-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--neon-orange);
+        margin-bottom: 10px;
+      }
+      .canvas-group.group-2 .group-label {
+        color: var(--neon-purple);
+      }
+      .canvas-tables {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .canvas-table {
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .group-leader {
+        font-size: 0.75rem;
+        color: #ffd700;
+      }
+      .canvas-stage {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(59, 130, 246, 0.2);
+        border: 1px solid rgba(59, 130, 246, 0.4);
+        padding: 8px 20px;
+        border-radius: var(--radius);
+        font-size: 0.75rem;
+        color: #60a5fa;
+      }
+      .wizard-demo-footer {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 20px;
+        background: rgba(249, 115, 22, 0.05);
+        color: var(--neon-orange);
+        font-weight: 500;
+        font-size: 0.9rem;
+        border-top: 1px solid rgba(249, 115, 22, 0.1);
+      }
+
+      /* ===== FEATURES ===== */
+      .features {
+        background: transparent;
+      }
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+      }
+      .feature-card {
+        background: rgba(10, 10, 15, 0.7);
+        border-radius: var(--radius-lg);
+        padding: 30px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s, box-shadow 0.3s;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
+        border-color: rgba(249, 115, 22, 0.3);
+      }
+      .feature-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: var(--white);
+        margin-bottom: 20px;
+      }
+      .feature-icon.icon-1 { background: linear-gradient(135deg, #ff6b35 0%, #a855f7 100%); }
+      .feature-icon.icon-2 { background: linear-gradient(135deg, #a855f7 0%, #ff6b35 100%); }
+      .feature-icon.icon-3 { background: linear-gradient(135deg, #ff6b35 0%, #10b981 100%); }
+      .feature-icon.icon-4 { background: linear-gradient(135deg, #a855f7 0%, #06b6d4 100%); }
+      .feature-icon.icon-5 { background: linear-gradient(135deg, #10b981 0%, #ff6b35 100%); }
+      .feature-icon.icon-6 { background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%); }
+      .feature-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+        color: #ffffff;
+      }
+      .feature-card p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      /* ===== PANELS ===== */
+      .panels {
+        background: transparent;
+      }
+      .panel-showcase {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        margin-bottom: 80px;
+      }
+      .panel-showcase.reverse {
+        direction: rtl;
+      }
+      .panel-showcase.reverse > * {
+        direction: ltr;
+      }
+      .panel-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-bottom: 16px;
+        border: 1px solid;
+      }
+      .panel-badge.admin {
+        background: rgba(168, 85, 247, 0.15);
+        color: var(--neon-purple);
+        border-color: rgba(168, 85, 247, 0.3);
+      }
+      .panel-badge.organizer {
+        background: rgba(249, 115, 22, 0.15);
+        color: var(--neon-orange);
+        border-color: rgba(249, 115, 22, 0.3);
+      }
+      .panel-badge.leader {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10b981;
+        border-color: rgba(16, 185, 129, 0.3);
+      }
+      .panel-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        margin-bottom: 16px;
+        color: #ffffff;
+      }
+      .panel-description {
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 24px;
+        line-height: 1.7;
+      }
+      .panel-features {
+        list-style: none;
+      }
+      .panel-features li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 0;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .panel-features li i {
+        color: #10b981;
+      }
+
+      /* ===== MOCK DASHBOARD ===== */
+      .mock-dashboard {
+        background: rgba(10, 10, 15, 0.8);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: 0 0 30px rgba(249, 115, 22, 0.2);
+        border: 1px solid rgba(249, 115, 22, 0.3);
+        backdrop-filter: blur(10px);
+      }
+      .mock-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: rgba(249, 115, 22, 0.1);
+        border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+      }
+      .mock-dots {
+        display: flex;
+        gap: 6px;
+      }
+      .mock-dots span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--danger);
+      }
+      .mock-dots span:nth-child(2) { background: var(--warning); }
+      .mock-dots span:nth-child(3) { background: var(--success); }
+      .mock-title {
+        color: var(--gray-light);
+        font-size: 0.85rem;
+        margin-left: auto;
+      }
+      .mock-content {
+        display: flex;
+        min-height: 250px;
+      }
+      .mock-sidebar {
+        width: 60px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 16px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+      .mock-menu-item {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gray-light);
+        font-size: 0.9rem;
+      }
+      .mock-menu-item.active {
+        background: linear-gradient(135deg, var(--neon-orange) 0%, var(--neon-purple) 100%);
+        color: #0a0a0f;
+      }
+      .mock-main {
+        flex: 1;
+        padding: 20px;
+      }
+      .mock-stats {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .mock-stat-card {
+        flex: 1;
+        background: rgba(249, 115, 22, 0.1);
+        border-radius: var(--radius);
+        padding: 12px;
+        text-align: center;
+        color: var(--white);
+        font-size: 0.75rem;
+        border: 1px solid rgba(249, 115, 22, 0.2);
+      }
+      .mock-stat-card i {
+        display: block;
+        font-size: 1.25rem;
+        color: var(--neon-orange);
+        margin-bottom: 4px;
+      }
+      .mock-chart {
+        height: 100px;
+        background: linear-gradient(180deg, rgba(249, 115, 22, 0.3) 0%, transparent 100%);
+        border-radius: var(--radius);
+        position: relative;
+      }
+      .mock-chart::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--neon-orange);
+        box-shadow: 0 0 10px var(--neon-orange);
+      }
+      .mock-table {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .mock-table-header, .mock-table-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        padding: 12px 16px;
+        font-size: 0.8rem;
+      }
+      .mock-table-header {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--gray-light);
+        font-weight: 600;
+      }
+      .mock-table-row {
+        color: var(--white);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .status-ok { color: var(--success); }
+      .status-warning { color: var(--warning); }
+      .status-danger { color: var(--danger); }
+
+      /* ===== MOCK MOBILE ===== */
+      .mock-mobile {
+        width: 280px;
+        background: var(--dark);
+        border-radius: 40px;
+        padding: 12px;
+        box-shadow: var(--shadow-xl);
+        margin: 0 auto;
+      }
+      .mock-mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 20px;
+        color: var(--white);
+        font-size: 0.75rem;
+      }
+      .mock-mobile-notch {
+        width: 80px;
+        height: 24px;
+        background: var(--dark-light);
+        border-radius: 20px;
+      }
+      .mock-mobile-content {
+        background: var(--white);
+        border-radius: 28px;
+        padding: 20px;
+        min-height: 350px;
+      }
+      .mock-mobile-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 20px;
+      }
+      .mock-task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+      .mock-task {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px;
+        background: var(--light);
+        border-radius: var(--radius);
+        font-size: 0.85rem;
+        color: var(--dark);
+      }
+      .mock-task.high { border-left: 3px solid var(--success); }
+      .mock-task.medium { border-left: 3px solid var(--warning); }
+      .mock-mobile-btn {
+        width: 100%;
+        padding: 14px;
+        background: var(--gradient-1);
+        color: var(--white);
+        border: none;
+        border-radius: var(--radius);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+      }
+
+      /* ===== TECHNOLOGY ===== */
+      .technology {
+        background: transparent;
+      }
+      .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+        margin-bottom: 40px;
+      }
+      .tech-card {
+        background: rgba(10, 10, 15, 0.7);
+        border-radius: var(--radius-lg);
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+      }
+      .tech-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
+        border-color: rgba(249, 115, 22, 0.3);
+      }
+      .tech-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #ff6b35 0%, #10b981 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: #0a0a0f;
+        margin: 0 auto 20px;
+      }
+      .tech-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+        color: #ffffff;
+      }
+      .tech-card p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+      .tech-highlight {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+        border-radius: var(--radius-lg);
+        padding: 40px;
+        color: var(--white);
+        border: 1px solid rgba(249, 115, 22, 0.3);
+        backdrop-filter: blur(10px);
+      }
+      .tech-highlight-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(249, 115, 22, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        flex-shrink: 0;
+        color: var(--neon-orange);
+        border: 1px solid rgba(249, 115, 22, 0.4);
+      }
+      .tech-highlight-content h3 {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+        color: var(--neon-orange);
+      }
+      .tech-highlight-content p {
+        opacity: 0.9;
+        line-height: 1.7;
+      }
+
+      /* ===== BENEFITS ===== */
+      .benefits {
+        background: transparent;
+      }
+      .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+      }
+      .benefit-card {
+        background: rgba(10, 10, 15, 0.7);
+        border-radius: var(--radius-lg);
+        padding: 30px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+        backdrop-filter: blur(10px);
+      }
+      .benefit-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 30px rgba(249, 115, 22, 0.2);
+        border-color: rgba(249, 115, 22, 0.3);
+      }
+      .benefit-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--neon-orange) 0%, var(--neon-purple) 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: #0a0a0f;
+        margin: 0 auto 20px;
+      }
+      .benefit-card h3 {
+        color: var(--white);
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+      }
+      .benefit-card p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      /* ===== CREATOR ===== */
+      .creator {
+        background: transparent;
+        padding: 80px 0;
+        border-top: 1px solid rgba(249, 115, 22, 0.2);
+      }
+      .creator-content {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+        background: rgba(10, 10, 15, 0.6);
+        padding: 40px;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(249, 115, 22, 0.2);
+        backdrop-filter: blur(10px);
+      }
+      .creator-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, var(--neon-orange) 0%, var(--neon-purple) 100%);
+        color: #0a0a0f;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+      }
+      .creator-content h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 20px;
+      }
+      .creator-content p {
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.8;
+        margin-bottom: 30px;
+      }
+      .creator-content strong {
+        color: var(--neon-orange);
+      }
+      .creator-signature {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .creator-signature strong {
+        color: #ffffff;
+        font-size: 1.1rem;
+      }
+      .creator-year {
+        background: var(--neon-orange);
+        color: #0a0a0f;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      /* ===== FOOTER ===== */
+      .footer {
+        background: rgba(10, 10, 15, 0.8);
+        backdrop-filter: blur(10px);
+        color: var(--white);
+        padding: 40px 0;
+        border-top: 1px solid rgba(249, 115, 22, 0.2);
+      }
+      .footer-simple {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        text-align: center;
+      }
+      .footer-logo-icon {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, var(--neon-orange) 0%, var(--neon-purple) 100%);
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: #0a0a0f;
+        box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
+      }
+      .footer-simple p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+      }
+      .footer-simple strong {
+        color: var(--neon-orange);
+      }
+      .footer-credit {
+        font-size: 0.8rem;
+        opacity: 0.7;
+      }
+
+      /* ===== MOBILE MENU ===== */
+      .mobile-menu {
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 10, 15, 0.98);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+      }
+      .mobile-menu.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      .mobile-menu-content {
+        text-align: center;
+      }
+      .mobile-menu-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        color: var(--neon-orange);
+        font-size: 2rem;
+        cursor: pointer;
+      }
+      .mobile-menu-content a {
+        display: block;
+        color: var(--white);
+        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: 600;
+        padding: 16px;
+        transition: all 0.3s;
+      }
+      .mobile-menu-content a:hover {
+        color: var(--neon-orange);
+        text-shadow: 0 0 10px var(--neon-orange);
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 1024px) {
+        .realtime-features { grid-template-columns: 1fr; }
+        .realtime-main-visual { height: 300px; }
+        .panel-showcase { grid-template-columns: 1fr; }
+        .panel-showcase.reverse { direction: ltr; }
+        .panel-visual { order: -1; }
+        .features-grid { grid-template-columns: repeat(2, 1fr); }
+        .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+        .tech-grid { grid-template-columns: repeat(2, 1fr); }
+        .tech-highlight { flex-direction: column; text-align: center; }
+      }
+      @media (max-width: 768px) {
+        .nav-links { display: none; }
+        .mobile-menu-btn { display: block; }
+        .hero-title { font-size: 2rem; }
+        .hero-stats { gap: 24px; }
+        .stat-number { font-size: 2rem; }
+        .tech-grid { grid-template-columns: 1fr; }
+        .innovation-content { flex-direction: column; text-align: center; }
+        .realtime-cards { grid-template-columns: 1fr; }
+        .wizard-flow { flex-direction: column; }
+        .wizard-arrow { transform: rotate(90deg); }
+        .features-grid { grid-template-columns: 1fr; }
+        .benefits-grid { grid-template-columns: 1fr; }
+        .realtime-stats-bar { gap: 30px; }
+        .container { padding: 0 16px; }
+        .section-title { font-size: 1.75rem; }
+        .panel-showcase { grid-template-columns: 1fr; gap: 30px; }
+        .mock-mobile { width: 100%; max-width: 280px; }
+        .creator-content h2 { font-size: 2rem; }
+        .realtime-main-visual { height: 250px; }
+        .realtime-pulse { width: 120px; height: 120px; }
+        .realtime-core { font-size: 3rem; }
+        .realtime-node { width: 40px; height: 40px; font-size: 1rem; }
+      }
+      @media (max-width: 480px) {
+        .hero-title { font-size: 1.5rem; }
+        .hero-subtitle { font-size: 1rem; }
+        .hero-buttons { flex-direction: column; align-items: center; }
+        .btn-lg { padding: 14px 24px; font-size: 0.9rem; width: 100%; justify-content: center; }
+        .hero-stats { gap: 16px; }
+        .stat-number { font-size: 1.5rem; }
+        .stat-label { font-size: 0.75rem; }
+        .section-badge { font-size: 0.75rem; padding: 6px 12px; }
+        .section-title { font-size: 1.5rem; }
+        .section-subtitle { font-size: 0.95rem; }
+        .wizard-step { padding: 15px; min-width: 100%; }
+        .wizard-demo { max-width: 100%; }
+        .feature-card { padding: 20px; }
+        .feature-icon { width: 50px; height: 50px; font-size: 1.25rem; }
+        .benefit-card { padding: 20px; }
+        .benefit-icon { width: 60px; height: 60px; font-size: 1.5rem; }
+        .tech-card { padding: 20px; }
+        .tech-icon { width: 60px; height: 60px; font-size: 1.5rem; }
+        .tech-highlight { padding: 24px; }
+        .tech-highlight-icon { width: 60px; height: 60px; font-size: 1.5rem; }
+        .realtime-stats-bar { padding: 24px; gap: 20px; }
+        .realtime-stat-value { font-size: 1.5rem; }
+        .realtime-card { padding: 16px; }
+        .innovation-content { padding: 0 16px; }
+        .innovation-icon { width: 60px; height: 60px; font-size: 1.5rem; }
+        .innovation-text h3 { font-size: 1.25rem; }
+        .creator-content h2 { font-size: 1.75rem; }
+        .creator-signature { flex-direction: column; gap: 8px; }
+        .footer-logo-icon { width: 48px; height: 48px; font-size: 1.25rem; }
+        .mobile-menu-content a { font-size: 1.25rem; padding: 12px; }
+      }
+      @media (max-width: 768px) and (orientation: landscape) {
+        .hero { min-height: auto; padding: 100px 0 60px; }
+        .hero-stats { flex-wrap: wrap; }
+      }
+    </style>
+
+    <script>
+      // ========================================
+      // THREE.JS BACKGROUND SETUP
+      // ========================================
+      const initThreeJS = () => {
+        const threeCanvas = document.getElementById("three-canvas");
+        if (!threeCanvas) return;
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: threeCanvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Particle System - Orange colored particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 2500;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for (let i = 0; i < particlesCount * 3; i++) {
+          posArray[i] = (Math.random() - 0.5) * 12;
+        }
+
+        particlesGeometry.setAttribute("position", new THREE.BufferAttribute(posArray, 3));
+
+        const particlesMaterial = new THREE.PointsMaterial({
+          size: 0.015,
+          color: 0xff6b35,
+          transparent: true,
+          opacity: 0.8,
+          blending: THREE.AdditiveBlending,
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Floating Geometric Shapes
+        const shapes = [];
+        const geometries = [
+          new THREE.IcosahedronGeometry(0.3, 0),
+          new THREE.OctahedronGeometry(0.25, 0),
+          new THREE.TetrahedronGeometry(0.3, 0),
+        ];
+
+        for (let i = 0; i < 20; i++) {
+          const geometry = geometries[Math.floor(Math.random() * geometries.length)];
+          const material = new THREE.MeshBasicMaterial({
+            color: Math.random() > 0.5 ? 0xff6b35 : 0xa855f7,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.25,
+          });
+          const shape = new THREE.Mesh(geometry, material);
+          shape.position.set(
+            (Math.random() - 0.5) * 18,
+            (Math.random() - 0.5) * 18,
+            (Math.random() - 0.5) * 12
+          );
+          shape.userData = {
+            rotationSpeed: {
+              x: (Math.random() - 0.5) * 0.015,
+              y: (Math.random() - 0.5) * 0.015,
+              z: (Math.random() - 0.5) * 0.015,
+            },
+            floatSpeed: Math.random() * 0.008 + 0.004,
+            floatOffset: Math.random() * Math.PI * 2,
+          };
+          shapes.push(shape);
+          scene.add(shape);
+        }
+
+        camera.position.z = 5;
+
+        // Mouse Interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        document.addEventListener("mousemove", (event) => {
+          mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+          mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // Animation Loop
+        const clock = new THREE.Clock();
+
+        function animate() {
+          requestAnimationFrame(animate);
+          const elapsedTime = clock.getElapsedTime();
+
+          targetX += (mouseX - targetX) * 0.05;
+          targetY += (mouseY - targetY) * 0.05;
+
+          particlesMesh.rotation.y = elapsedTime * 0.03;
+          particlesMesh.rotation.x = targetY * 0.2;
+          particlesMesh.rotation.y += targetX * 0.2;
+
+          shapes.forEach((shape) => {
+            shape.rotation.x += shape.userData.rotationSpeed.x;
+            shape.rotation.y += shape.userData.rotationSpeed.y;
+            shape.rotation.z += shape.userData.rotationSpeed.z;
+            shape.position.y += Math.sin(elapsedTime * shape.userData.floatSpeed + shape.userData.floatOffset) * 0.002;
+          });
+
+          camera.position.x += (targetX * 0.4 - camera.position.x) * 0.02;
+          camera.position.y += (targetY * 0.4 - camera.position.y) * 0.02;
+          camera.lookAt(scene.position);
+
+          renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Resize Handler
+        window.addEventListener("resize", () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Parallax Effect on Scroll
+        window.addEventListener("scroll", () => {
+          const scrolled = window.pageYOffset;
+          particlesMesh.position.y = scrolled * 0.0008;
+        });
+      };
+
+      // Initialize Three.js on load
+      document.addEventListener("DOMContentLoaded", initThreeJS);
+
+      // Navbar scroll effect
+      const navbar = document.getElementById("navbar");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      });
+
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileMenu = document.getElementById("mobileMenu");
+        mobileMenu.classList.toggle("active");
+        document.body.style.overflow = mobileMenu.classList.contains("active") ? "hidden" : "";
+      }
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+
+      // Intersection Observer for animations
+      const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+          }
+        });
+      }, observerOptions);
+
+      // Animate elements on scroll
+      document.querySelectorAll(".feature-card, .benefit-card, .realtime-card, .panel-showcase, .wizard-step, .tech-card").forEach((el) => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(30px)";
+        el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        observer.observe(el);
+      });
+
+      // Lightbox Functions
+      function openLightbox(src) {
+        const overlay = document.getElementById("lightboxOverlay");
+        const img = document.getElementById("lightboxImage");
+        img.src = src;
+        overlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeLightbox() {
+        const overlay = document.getElementById("lightboxOverlay");
+        overlay.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
+      // ESC key to close lightbox
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeLightbox();
+        }
+      });
+    </script>
+  </body>
+</html>
