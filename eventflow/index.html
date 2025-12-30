@@ -197,6 +197,15 @@
       text-shadow: 0 0 10px #00f5ff;
     }
 
+    .nav-links a.nav-3d {
+      color: #a855f7;
+    }
+
+    .nav-links a.nav-3d:hover {
+      color: #a855f7;
+      text-shadow: 0 0 10px #a855f7;
+    }
+
     .mobile-menu-btn {
       display: none;
       background: none;
@@ -466,6 +475,7 @@
         <div class="nav-links" id="navLinks">
           <a href="../index.html"><i class="fas fa-home"></i> Ana Sayfa</a>
           <a href="#venue-layout">Alan Tasarımı</a>
+          <a href="#preview-3d" class="nav-3d"><i class="fas fa-cube"></i> 3D Görünüm</a>
           <a href="#features">Özellikler</a>
           <a href="#panels">Paneller</a>
           <a href="../minibar/index.html" class="nav-minibar"><i class="fas fa-wine-bottle"></i> Minibar</a>
@@ -483,6 +493,7 @@
         </button>
         <a href="../index.html" onclick="toggleMobileMenu()">Ana Sayfa</a>
         <a href="#venue-layout" onclick="toggleMobileMenu()">Alan Tasarımı</a>
+        <a href="#preview-3d" onclick="toggleMobileMenu()">3D Görünüm</a>
         <a href="#features" onclick="toggleMobileMenu()">Özellikler</a>
         <a href="#panels" onclick="toggleMobileMenu()">Paneller</a>
         <a href="../minibar/index.html" onclick="toggleMobileMenu()">Minibar Takip</a>
@@ -862,6 +873,113 @@
         <i class="fas fa-file-export"></i>
         <h4>Export</h4>
         <p>PDF ve görsel çıktı</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3D PREVIEW SECTION -->
+<section class="preview-3d" id="preview-3d">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge preview3d"><i class="fas fa-cube"></i> 3D Önizleme</span>
+      <h2 class="section-title">İnteraktif 3D Mekan Görünümü</h2>
+      <p class="section-subtitle">
+        Etkinlik alanınızı gerçekçi 3 boyutlu ortamda görüntüleyin. Masaları, sahneyi ve tüm elemanları interaktif olarak keşfedin.
+      </p>
+    </div>
+    
+    <div class="preview3d-showcase">
+      <div class="preview3d-features">
+        <div class="preview3d-feature-card">
+          <div class="preview3d-feature-icon"><i class="fas fa-rotate"></i></div>
+          <h3>360° Döndürme</h3>
+          <p>Mekanı her açıdan görüntüleyin. Sol tık basılı tutarak sahneyi döndürün.</p>
+        </div>
+        <div class="preview3d-feature-card">
+          <div class="preview3d-feature-icon"><i class="fas fa-search-plus"></i></div>
+          <h3>Yakınlaştırma</h3>
+          <p>Mouse tekerleği ile detaylara yakınlaşın veya genel görünüme uzaklaşın.</p>
+        </div>
+        <div class="preview3d-feature-card">
+          <div class="preview3d-feature-icon"><i class="fas fa-hand-pointer"></i></div>
+          <h3>İnteraktif Masalar</h3>
+          <p>Masalara tıklayarak detaylı bilgi alın - kapasite, grup ve personel bilgileri.</p>
+        </div>
+        <div class="preview3d-feature-card">
+          <div class="preview3d-feature-icon"><i class="fas fa-camera"></i></div>
+          <h3>Ekran Görüntüsü</h3>
+          <p>3D görünümün ekran görüntüsünü alarak paylaşın veya raporlara ekleyin.</p>
+        </div>
+      </div>
+      
+      <div class="preview3d-canvas-container">
+        <div class="preview3d-header">
+          <div class="preview3d-controls">
+            <span class="preview3d-control active" data-view="perspective" title="Perspektif Görünüm">
+              <i class="fas fa-cube"></i>
+            </span>
+            <span class="preview3d-control" data-view="top" title="Üstten Görünüm">
+              <i class="fas fa-arrow-down"></i>
+            </span>
+            <span class="preview3d-control" data-view="front" title="Önden Görünüm">
+              <i class="fas fa-arrow-right"></i>
+            </span>
+          </div>
+          <span class="preview3d-title"><i class="fas fa-cube"></i> 3D Venue Preview</span>
+          <div class="preview3d-actions">
+            <span class="preview3d-action" id="resetCamera3D" title="Görünümü Sıfırla">
+              <i class="fas fa-home"></i>
+            </span>
+            <span class="preview3d-action" id="screenshot3D" title="Ekran Görüntüsü">
+              <i class="fas fa-camera"></i>
+            </span>
+            <span class="preview3d-action" id="fullscreen3D" title="Tam Ekran">
+              <i class="fas fa-expand"></i>
+            </span>
+          </div>
+        </div>
+        <div class="preview3d-canvas" id="venue3DCanvas">
+          <!-- Three.js 3D Scene will be rendered here -->
+          <div class="preview3d-loading" id="preview3DLoading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>3D Sahne Yükleniyor...</span>
+          </div>
+        </div>
+        <div class="preview3d-footer">
+          <div class="preview3d-info">
+            <span><i class="fas fa-chair"></i> 6 Masa</span>
+            <span><i class="fas fa-users"></i> 50 Kişilik</span>
+            <span><i class="fas fa-music"></i> 1 Sahne</span>
+            <span><i class="fas fa-glass-martini-alt"></i> 1 Bar</span>
+          </div>
+          <div class="preview3d-hint">
+            <i class="fas fa-mouse"></i> Sol tık: Döndür | Scroll: Yakınlaştır | Sağ tık: Kaydır
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="preview3d-capabilities">
+      <div class="preview3d-cap">
+        <i class="fas fa-vr-cardboard"></i>
+        <h4>Gerçekçi Görünüm</h4>
+        <p>Gölgeler ve ışıklandırma</p>
+      </div>
+      <div class="preview3d-cap">
+        <i class="fas fa-users-viewfinder"></i>
+        <h4>Ekip Görünümü</h4>
+        <p>Personel atamalarını görün</p>
+      </div>
+      <div class="preview3d-cap">
+        <i class="fas fa-palette"></i>
+        <h4>Renk Kodlama</h4>
+        <p>Grup ve takım renkleri</p>
+      </div>
+      <div class="preview3d-cap">
+        <i class="fas fa-mobile-screen"></i>
+        <h4>Responsive</h4>
+        <p>Tüm cihazlarda çalışır</p>
       </div>
     </div>
   </div>
@@ -1973,6 +2091,252 @@
     font-size: 0.8rem;
   }
 
+  /* ===== 3D PREVIEW SECTION ===== */
+  .preview-3d {
+    background: transparent;
+  }
+
+  .section-badge.preview3d {
+    background: rgba(139, 92, 246, 0.15);
+    color: #a855f7;
+    border-color: rgba(139, 92, 246, 0.3);
+  }
+
+  .preview3d-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 40px;
+    align-items: start;
+    margin-bottom: 50px;
+  }
+
+  .preview3d-features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .preview3d-feature-card {
+    background: rgba(10, 10, 15, 0.7);
+    border-radius: var(--radius);
+    padding: 20px;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  .preview3d-feature-card:hover {
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+  }
+
+  .preview3d-feature-icon {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #0a0a0f;
+    margin-bottom: 12px;
+  }
+
+  .preview3d-feature-card h3 {
+    color: var(--white);
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  .preview3d-feature-card p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .preview3d-canvas-container {
+    background: rgba(10, 10, 15, 0.8);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
+  }
+
+  .preview3d-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: rgba(139, 92, 246, 0.1);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+  }
+
+  .preview3d-controls {
+    display: flex;
+    gap: 8px;
+  }
+
+  .preview3d-control {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .preview3d-control.active,
+  .preview3d-control:hover {
+    background: #a855f7;
+    color: #0a0a0f;
+  }
+
+  .preview3d-title {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .preview3d-title i {
+    color: #a855f7;
+  }
+
+  .preview3d-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .preview3d-action {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .preview3d-action:hover {
+    background: rgba(139, 92, 246, 0.3);
+    color: #a855f7;
+  }
+
+  .preview3d-canvas {
+    height: 450px;
+    position: relative;
+    background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+  }
+
+  .preview3d-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #a855f7;
+    font-size: 0.9rem;
+  }
+
+  .preview3d-loading i {
+    font-size: 2rem;
+  }
+
+  .preview3d-loading.hidden {
+    display: none;
+  }
+
+  .preview3d-footer {
+    padding: 12px 16px;
+    background: rgba(139, 92, 246, 0.05);
+    border-top: 1px solid rgba(139, 92, 246, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .preview3d-info {
+    display: flex;
+    gap: 20px;
+  }
+
+  .preview3d-info span {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .preview3d-info i {
+    color: #a855f7;
+  }
+
+  .preview3d-hint {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .preview3d-hint i {
+    color: #a855f7;
+  }
+
+  .preview3d-capabilities {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .preview3d-cap {
+    text-align: center;
+    padding: 24px 16px;
+    background: rgba(10, 10, 15, 0.6);
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .preview3d-cap:hover {
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
+  }
+
+  .preview3d-cap i {
+    font-size: 1.5rem;
+    color: #a855f7;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .preview3d-cap h4 {
+    color: var(--white);
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+
+  .preview3d-cap p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+  }
+
   /* ===== FEATURES ===== */
   .features {
     background: transparent;
@@ -2723,6 +3087,14 @@
     .venue-capabilities {
       grid-template-columns: repeat(2, 1fr);
     }
+
+    .preview3d-showcase {
+      grid-template-columns: 1fr;
+    }
+
+    .preview3d-capabilities {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   @media (max-width: 768px) {
@@ -2832,6 +3204,28 @@
       width: 40px;
       height: 40px;
       font-size: 1rem;
+    }
+
+    .preview3d-showcase {
+      grid-template-columns: 1fr;
+    }
+
+    .preview3d-canvas {
+      height: 350px;
+    }
+
+    .preview3d-capabilities {
+      grid-template-columns: 1fr;
+    }
+
+    .preview3d-footer {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .preview3d-info {
+      justify-content: center;
+      flex-wrap: wrap;
     }
   }
 
@@ -3121,6 +3515,333 @@
   // Initialize Three.js on load
   document.addEventListener( "DOMContentLoaded", initThreeJS );
 
+  // ========================================
+  // 3D VENUE PREVIEW
+  // ========================================
+  const init3DVenuePreview = () => {
+    const container = document.getElementById( "venue3DCanvas" );
+    const loading = document.getElementById( "preview3DLoading" );
+    if ( !container ) return;
+
+    // Scene setup
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color( 0x0f172a );
+    scene.fog = new THREE.Fog( 0x0f172a, 8, 20 );
+
+    // Camera
+    const camera = new THREE.PerspectiveCamera( 50, container.clientWidth / container.clientHeight, 0.1, 100 );
+    camera.position.set( 4, 5, 6 );
+    camera.lookAt( 0, 0, 0 );
+
+    // Renderer
+    const renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
+    renderer.setSize( container.clientWidth, container.clientHeight );
+    renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild( renderer.domElement );
+
+    // Hide loading
+    if ( loading ) loading.classList.add( "hidden" );
+
+    // Lights
+    const ambientLight = new THREE.AmbientLight( 0xffffff, 0.4 );
+    scene.add( ambientLight );
+
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.8 );
+    directionalLight.position.set( 5, 10, 5 );
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+    scene.add( directionalLight );
+
+    const pointLight = new THREE.PointLight( 0xa855f7, 0.5, 15 );
+    pointLight.position.set( 0, 3, 0 );
+    scene.add( pointLight );
+
+    // Floor
+    const floorGeometry = new THREE.PlaneGeometry( 12, 10 );
+    const floorMaterial = new THREE.MeshStandardMaterial( { 
+      color: 0x1e1b4b, 
+      roughness: 0.8,
+      metalness: 0.1
+    } );
+    const floor = new THREE.Mesh( floorGeometry, floorMaterial );
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    scene.add( floor );
+
+    // Grid
+    const gridHelper = new THREE.GridHelper( 12, 24, 0x334155, 0x1e293b );
+    gridHelper.position.y = 0.01;
+    scene.add( gridHelper );
+
+    // Stage
+    const stageGeometry = new THREE.BoxGeometry( 6, 0.4, 1.5 );
+    const stageMaterial = new THREE.MeshStandardMaterial( { color: 0x1e3a5f, roughness: 0.6 } );
+    const stage = new THREE.Mesh( stageGeometry, stageMaterial );
+    stage.position.set( 0, 0.2, -3.5 );
+    stage.castShadow = true;
+    stage.receiveShadow = true;
+    scene.add( stage );
+
+    // Stage top
+    const stageTopGeometry = new THREE.BoxGeometry( 5.9, 0.05, 1.4 );
+    const stageTopMaterial = new THREE.MeshStandardMaterial( { color: 0x64748b } );
+    const stageTop = new THREE.Mesh( stageTopGeometry, stageTopMaterial );
+    stageTop.position.set( 0, 0.42, -3.5 );
+    scene.add( stageTop );
+
+    // Tables
+    const tablePositions = [
+      { x: -2.5, z: -1, color: 0xf97316, label: "T1" },
+      { x: 0, z: -1, color: 0xf97316, label: "T2" },
+      { x: 2.5, z: -1, color: 0xf97316, label: "T3" },
+      { x: -1.5, z: 1.5, color: 0xf97316, label: "T4" },
+      { x: 0, z: 1.5, color: 0xa855f7, label: "VIP", isVip: true },
+      { x: 1.5, z: 1.5, color: 0xf97316, label: "T5" },
+    ];
+
+    const tables = [];
+    tablePositions.forEach( ( pos ) => {
+      const tableGroup = new THREE.Group();
+
+      // Table cloth (top)
+      const clothGeometry = new THREE.CylinderGeometry( 0.5, 0.52, 0.05, 24 );
+      const clothMaterial = new THREE.MeshStandardMaterial( { color: pos.color } );
+      const cloth = new THREE.Mesh( clothGeometry, clothMaterial );
+      cloth.position.y = 0.75;
+      cloth.castShadow = true;
+      tableGroup.add( cloth );
+
+      // Table surface
+      const surfaceGeometry = new THREE.CylinderGeometry( 0.48, 0.48, 0.03, 24 );
+      const surfaceMaterial = new THREE.MeshStandardMaterial( { color: 0xf1f5f9 } );
+      const surface = new THREE.Mesh( surfaceGeometry, surfaceMaterial );
+      surface.position.y = 0.78;
+      tableGroup.add( surface );
+
+      // Table leg
+      const legGeometry = new THREE.CylinderGeometry( 0.05, 0.08, 0.7, 8 );
+      const legMaterial = new THREE.MeshStandardMaterial( { color: 0x475569, metalness: 0.3, roughness: 0.7 } );
+      const leg = new THREE.Mesh( legGeometry, legMaterial );
+      leg.position.y = 0.35;
+      leg.castShadow = true;
+      tableGroup.add( leg );
+
+      // Base
+      const baseGeometry = new THREE.CylinderGeometry( 0.15, 0.15, 0.05, 12 );
+      const baseMaterial = new THREE.MeshStandardMaterial( { color: 0x334155 } );
+      const base = new THREE.Mesh( baseGeometry, baseMaterial );
+      base.position.y = 0.025;
+      tableGroup.add( base );
+
+      // VIP glow effect
+      if ( pos.isVip ) {
+        const glowGeometry = new THREE.RingGeometry( 0.55, 0.7, 32 );
+        const glowMaterial = new THREE.MeshBasicMaterial( { 
+          color: 0xa855f7, 
+          transparent: true, 
+          opacity: 0.3,
+          side: THREE.DoubleSide
+        } );
+        const glow = new THREE.Mesh( glowGeometry, glowMaterial );
+        glow.rotation.x = -Math.PI / 2;
+        glow.position.y = 0.02;
+        tableGroup.add( glow );
+      }
+
+      tableGroup.position.set( pos.x, 0, pos.z );
+      tableGroup.userData = { label: pos.label, isVip: pos.isVip };
+      tables.push( tableGroup );
+      scene.add( tableGroup );
+    } );
+
+    // Bar
+    const barGroup = new THREE.Group();
+    const barGeometry = new THREE.BoxGeometry( 1.5, 0.8, 0.5 );
+    const barMaterial = new THREE.MeshStandardMaterial( { color: 0x1e293b, roughness: 0.8 } );
+    const bar = new THREE.Mesh( barGeometry, barMaterial );
+    bar.position.y = 0.4;
+    bar.castShadow = true;
+    barGroup.add( bar );
+
+    const barTopGeometry = new THREE.BoxGeometry( 1.6, 0.08, 0.6 );
+    const barTopMaterial = new THREE.MeshStandardMaterial( { color: 0x10b981 } );
+    const barTop = new THREE.Mesh( barTopGeometry, barTopMaterial );
+    barTop.position.y = 0.84;
+    barGroup.add( barTop );
+
+    barGroup.position.set( 4.5, 0, 3 );
+    scene.add( barGroup );
+
+    // DJ Booth
+    const djGroup = new THREE.Group();
+    const djGeometry = new THREE.BoxGeometry( 0.8, 0.6, 0.6 );
+    const djMaterial = new THREE.MeshStandardMaterial( { color: 0x1e293b } );
+    const dj = new THREE.Mesh( djGeometry, djMaterial );
+    dj.position.y = 0.3;
+    dj.castShadow = true;
+    djGroup.add( dj );
+
+    const djTopGeometry = new THREE.BoxGeometry( 0.9, 0.06, 0.7 );
+    const djTopMaterial = new THREE.MeshStandardMaterial( { color: 0xa855f7 } );
+    const djTop = new THREE.Mesh( djTopGeometry, djTopMaterial );
+    djTop.position.y = 0.63;
+    djGroup.add( djTop );
+
+    djGroup.position.set( -4.5, 0, 3 );
+    scene.add( djGroup );
+
+    // OrbitControls (manual implementation)
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+    let cameraAngle = { theta: Math.PI / 4, phi: Math.PI / 4 };
+    let cameraDistance = 10;
+    let cameraTarget = new THREE.Vector3( 0, 0, 0 );
+
+    const updateCameraPosition = () => {
+      camera.position.x = cameraTarget.x + cameraDistance * Math.sin( cameraAngle.theta ) * Math.cos( cameraAngle.phi );
+      camera.position.y = cameraTarget.y + cameraDistance * Math.sin( cameraAngle.phi );
+      camera.position.z = cameraTarget.z + cameraDistance * Math.cos( cameraAngle.theta ) * Math.cos( cameraAngle.phi );
+      camera.lookAt( cameraTarget );
+    };
+
+    updateCameraPosition();
+
+    renderer.domElement.addEventListener( "mousedown", ( e ) => {
+      isDragging = true;
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    } );
+
+    renderer.domElement.addEventListener( "mousemove", ( e ) => {
+      if ( !isDragging ) return;
+      const deltaX = e.clientX - previousMousePosition.x;
+      const deltaY = e.clientY - previousMousePosition.y;
+      cameraAngle.theta -= deltaX * 0.01;
+      cameraAngle.phi = Math.max( 0.1, Math.min( Math.PI / 2 - 0.1, cameraAngle.phi + deltaY * 0.01 ) );
+      updateCameraPosition();
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    } );
+
+    renderer.domElement.addEventListener( "mouseup", () => { isDragging = false; } );
+    renderer.domElement.addEventListener( "mouseleave", () => { isDragging = false; } );
+
+    renderer.domElement.addEventListener( "wheel", ( e ) => {
+      e.preventDefault();
+      cameraDistance = Math.max( 4, Math.min( 20, cameraDistance + e.deltaY * 0.01 ) );
+      updateCameraPosition();
+    }, { passive: false } );
+
+    // Touch support
+    let touchStartDistance = 0;
+    renderer.domElement.addEventListener( "touchstart", ( e ) => {
+      if ( e.touches.length === 1 ) {
+        isDragging = true;
+        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      } else if ( e.touches.length === 2 ) {
+        touchStartDistance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+      }
+    } );
+
+    renderer.domElement.addEventListener( "touchmove", ( e ) => {
+      e.preventDefault();
+      if ( e.touches.length === 1 && isDragging ) {
+        const deltaX = e.touches[0].clientX - previousMousePosition.x;
+        const deltaY = e.touches[0].clientY - previousMousePosition.y;
+        cameraAngle.theta -= deltaX * 0.01;
+        cameraAngle.phi = Math.max( 0.1, Math.min( Math.PI / 2 - 0.1, cameraAngle.phi + deltaY * 0.01 ) );
+        updateCameraPosition();
+        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      } else if ( e.touches.length === 2 ) {
+        const currentDistance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const delta = touchStartDistance - currentDistance;
+        cameraDistance = Math.max( 4, Math.min( 20, cameraDistance + delta * 0.02 ) );
+        updateCameraPosition();
+        touchStartDistance = currentDistance;
+      }
+    }, { passive: false } );
+
+    renderer.domElement.addEventListener( "touchend", () => { isDragging = false; } );
+
+    // Reset camera button
+    const resetBtn = document.getElementById( "resetCamera3D" );
+    if ( resetBtn ) {
+      resetBtn.addEventListener( "click", () => {
+        cameraAngle = { theta: Math.PI / 4, phi: Math.PI / 4 };
+        cameraDistance = 10;
+        cameraTarget.set( 0, 0, 0 );
+        updateCameraPosition();
+      } );
+    }
+
+    // Screenshot button
+    const screenshotBtn = document.getElementById( "screenshot3D" );
+    if ( screenshotBtn ) {
+      screenshotBtn.addEventListener( "click", () => {
+        renderer.render( scene, camera );
+        const link = document.createElement( "a" );
+        link.download = `3d-venue-${new Date().toISOString().slice( 0, 10 )}.png`;
+        link.href = renderer.domElement.toDataURL( "image/png" );
+        link.click();
+      } );
+    }
+
+    // Fullscreen button
+    const fullscreenBtn = document.getElementById( "fullscreen3D" );
+    if ( fullscreenBtn ) {
+      fullscreenBtn.addEventListener( "click", () => {
+        if ( container.requestFullscreen ) {
+          container.requestFullscreen();
+        } else if ( container.webkitRequestFullscreen ) {
+          container.webkitRequestFullscreen();
+        }
+      } );
+    }
+
+    // Animation loop
+    const clock = new THREE.Clock();
+    const animate = () => {
+      requestAnimationFrame( animate );
+      const elapsed = clock.getElapsedTime();
+
+      // Subtle table animation
+      tables.forEach( ( table, i ) => {
+        if ( table.userData.isVip ) {
+          table.children[4].rotation.z = elapsed * 0.5; // VIP glow rotation
+        }
+      } );
+
+      // Point light animation
+      pointLight.intensity = 0.4 + Math.sin( elapsed * 2 ) * 0.1;
+
+      renderer.render( scene, camera );
+    };
+
+    animate();
+
+    // Resize handler
+    const handleResize = () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize( container.clientWidth, container.clientHeight );
+    };
+
+    window.addEventListener( "resize", handleResize );
+
+    // Fullscreen change handler
+    document.addEventListener( "fullscreenchange", handleResize );
+  };
+
+  // Initialize 3D Venue Preview on load
+  document.addEventListener( "DOMContentLoaded", init3DVenuePreview );
+
   // Navbar scroll effect
   const navbar = document.getElementById( "navbar" );
   window.addEventListener( "scroll", () => {
@@ -3161,7 +3882,7 @@
   }, observerOptions );
 
   // Animate elements on scroll
-  document.querySelectorAll( ".feature-card, .benefit-card, .realtime-card, .panel-showcase, .wizard-step, .tech-card" ).forEach( ( el ) => {
+  document.querySelectorAll( ".feature-card, .benefit-card, .realtime-card, .panel-showcase, .wizard-step, .tech-card, .preview3d-feature-card, .preview3d-cap" ).forEach( ( el ) => {
     el.style.opacity = "0";
     el.style.transform = "translateY(30px)";
     el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
